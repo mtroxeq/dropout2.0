@@ -1,3 +1,12 @@
+<?php
+    error_reporting(E_ALL ^ E_WARNING);
+    function user()
+    {
+        if (!isset($_SESSION['login'])) return 'brak';
+        if ($_SESSION['login']=='') return 'brak';
+        return $_SESSION['login'];
+    }
+?>
 <!DOCTYPE html>
 <html lang="pl">
 <head>
@@ -24,8 +33,20 @@
             </form>
         </section>
         <section id="links">
-            <a href="login.php" >Zaloguj się</a>&nbsp;&nbsp;&nbsp;&nbsp;
-            <a href="signup.php" id="b_creac">Stwórz konto</a>
+            <?php
+                @session_start();
+                if(isset($_SESSION['login'])){
+                    echo '<a href="upload.php" >Prześlij</a>
+                    &nbsp;&nbsp;&nbsp;&nbsp;
+                    <a href="account.php" >'.user().'</a>
+                    &nbsp;&nbsp;&nbsp;&nbsp;
+                    <a href="logout.php" >Wyloguj się</a>';
+                }else{
+                    echo '<a href="login.php" >Zaloguj się</a>
+                    &nbsp;&nbsp;&nbsp;&nbsp;
+                    <a href="signup.php" id="b_creac">Stwórz konto</a>';
+                }
+            ?>
         </section>
     </header>
     <main>

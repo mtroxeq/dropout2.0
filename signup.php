@@ -23,40 +23,54 @@
         </section>
     </header>
     <main>
-        <article id="login">
-            
-            
-        </article>
-</main>
+        <form action="login.php" method="post">
+            <article id="login">
+                <h1>Stwórz konto</h1>
+                    <input type="text" name="email" placeholder="Twój adres e-mail" required>
+                    &nbsp;&nbsp;&nbsp;&nbsp;
+                    <input type="text" name="username" placeholder="Twoja nazwa użytkownika" required>
+                    &nbsp;&nbsp;&nbsp;&nbsp;
+                    <input type="password" name="password" placeholder="Twoje hasło" required>
+                    &nbsp;&nbsp;&nbsp;&nbsp;
+                    <input type="password" placeholder="Powtórz hasło" required>
+                    &nbsp;&nbsp;&nbsp;&nbsp;
+                    <button type="submit">Utwórz konto</button>
+            </article>
+        </form>
+    </main>
 </body>
 </html>
 <?php
-    $login = $_POST['username'];
-    $plain_password = $_POST['password'];
-    $email = $_POST['email'];
+    error_reporting(E_ALL ^ E_WARNING);
 
-    $hashed_password = hash('sha256', $plain_password);
+    if($_SERVER['REQUEST_METHOD'] === 'POST'){
 
-    $db = mysqli_connect('localhost','root','','dropout2.0');
-
-    $login = mysqli_real_escape_string($db, $login);
-    $hashed_password = mysqli_real_escape_string($db, $hashed_password);
-
-    $check_query = "SELECT * FROM users WHERE username='$login'";
-    $check_result = mysqli_query($db, $check_query);
-    if (mysqli_num_rows($check_result) > 0) {
-        echo "<script>alert('Nazwa użytkownika jest już zajęta. Wybierz inną nazwę.')</script>";
-    } else {
-        $query = "INSERT INTO users (username, password, email, age) VALUES ('$login', '$hashed_password', '$email', '$age')";
-        $result = mysqli_query($db, $query);
-        if ($result) {
-            echo "<script>alert('Pomyślnie zarejestrowano.')</script>";
-            session_start();
-            $_SESSION['login'] = $login;
+        $login = $_POST['username'];
+        $plain_password = $_POST['password'];
+        $email = $_POST['email'];
+        
+        $hashed_password = hash('sha256', $plain_password);
+        
+        $db = mysqli_connect('localhost','root','','dropout2.0');
+        
+        $login = mysqli_real_escape_string($db, $login);
+        $hashed_password = mysqli_real_escape_string($db, $hashed_password);
+        
+        $check_query = "SELECT * FROM users WHERE username='$login'";
+        $check_result = mysqli_query($db, $check_query);
+        if (mysqli_num_rows($check_result) > 0) {
+            echo "<script>alert('Nazwa użytkownika jest już zajęta. Wybierz inną nazwę.')</script>";
         } else {
-            echo "<script>alert('Błąd podczas rejestracji.')</script>";
+            $query = "INSERT INTO users (username, password, email) VALUES ('$login', '$hashed_password', '$email')";
+            $result = mysqli_query($db, $query);
+            if ($result) {
+                session_start();
+                $_SESSION['login'] = $login;
+                echo "<script>alert('Pomyślnie zarejestrowano.');document.location='welcome.php'</script>";
+            } else {
+                echo "<script>alert('Błąd podczas rejestracji.');</script>";
+            }
         }
     }
     mysqli_close($db);
-    error_reporting(E_ALL ^ E_WARNING);
 ?>
