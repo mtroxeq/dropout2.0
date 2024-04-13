@@ -26,7 +26,7 @@
         <form action="login.php" method="post">
             <article id="login">
                 <h1>Logowanie</h1>
-                    <input type="text" name="email" placeholder="Twój adres e-mail">
+                    <input type="text" name="username" placeholder="Twoja nazwa użytkownika">
                     &nbsp;&nbsp;&nbsp;&nbsp;
                     <input type="password" name="password" placeholder="Twoje hasło">
                     &nbsp;&nbsp;&nbsp;&nbsp;
@@ -41,7 +41,7 @@
     error_reporting(E_ALL ^ E_WARNING);
 
     if($_SERVER['REQUEST_METHOD'] === 'POST'){
-        $login = $_POST['email'];
+        $login = $_POST['username'];
         $plain_password = $_POST['password'];
 
         $hashed_password = hash('sha256', $plain_password);
@@ -50,7 +50,7 @@
 
         $login = mysqli_real_escape_string($db, $login);
 
-        $query = "SELECT password FROM users WHERE email ='$login'";
+        $query = "SELECT password FROM users WHERE username ='$login'";
         $result = mysqli_query($db, $query);
 
         if ($result) {
@@ -70,6 +70,6 @@
         } else {
             echo "<script>alert('Błąd zapytania. Spróbuj ponownie.');</script>";
         }
+        mysqli_close($db);
     }
-    mysqli_close($db);
 ?>

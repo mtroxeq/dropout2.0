@@ -23,7 +23,7 @@
         </section>
     </header>
     <main>
-        <form action="login.php" method="post">
+        <form action="signup.php" method="post">
             <article id="login">
                 <h1>Stwórz konto</h1>
                     <input type="text" name="email" placeholder="Twój adres e-mail" required>
@@ -71,6 +71,7 @@
                 echo "<script>alert('Błąd podczas rejestracji.');</script>";
             }
         }
+        mysqli_close($db);
     }
-    mysqli_close($db);
+    
 ?>

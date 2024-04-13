@@ -1,3 +1,13 @@
+<?php
+    session_start();
+    error_reporting(E_ALL ^ E_WARNING);
+    function user()
+    {
+        if (!isset($_SESSION['login'])) return 'Gość';
+        if ($_SESSION['login']=='') return 'Gość';
+        return $_SESSION['login'];
+    }
+?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -15,11 +25,15 @@
         <label>Opis pliku:</label>
         <textarea name="fileDescription"></textarea>
         <br>
-        <label>Artysta:</label>
-        <input type="text" name="fileArtist">
-        <br>
+        <input type="hidden" name="fileArtist" value='<?php echo user(); ?>'>
         <label>Okładka albumu:</label>
         <input type="file" name="coverImage" accept="image/*">
+        <br>
+        <label>Prywatność:</label>
+        <select name="privacy" id="">
+            <option value="0">Publiczny</option>
+            <option value="1">Prywatny</option>
+        </select>
         <br>
         <input type="submit" value="Prześlij plik">
     </form>
@@ -39,14 +53,14 @@
         $coverImage = $_FILES["coverImage"];
         $privacy = $_POST["privacy"];
     
-        $targetDirectory = "music/";
+        $targetDirectory = "Music/";
         $targetFile = $targetDirectory . basename($uploadedFile["name"]);
     
         if (move_uploaded_file($uploadedFile["tmp_name"], $targetFile)) {
             echo "Plik muzyczny " . basename($uploadedFile["name"]) . " został przesłany.<br>";
         
             if ($coverImage["size"] > 0) {
-                $targetDirectory = "covers/";
+                $targetDirectory = "Covers/";
                 $targetCoverFile = $targetDirectory . basename($coverImage["name"]);
             
                 if (move_uploaded_file($coverImage["tmp_name"], $targetCoverFile)) {
@@ -77,6 +91,6 @@
         } else {
             echo "Wystąpił problem podczas przesyłania pliku muzycznego.<br>";
         }
+        mysqli_close($db);
     }
-    $db->close();
 ?>

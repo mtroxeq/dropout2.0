@@ -2,8 +2,8 @@
     error_reporting(E_ALL ^ E_WARNING);
     function user()
     {
-        if (!isset($_SESSION['login'])) return 'brak';
-        if ($_SESSION['login']=='') return 'brak';
+        if (!isset($_SESSION['login'])) return 'Gość';
+        if ($_SESSION['login']=='') return 'Gość';
         return $_SESSION['login'];
     }
 ?>
@@ -51,19 +51,52 @@
     </header>
     <main>
         <article id="desc">
-            <h1>Witaj na <span style="color:#1C5D99">dropout</span></h1><p>Tutaj muzyka spotyka swoją przyszłość. W sercu naszej platformy leży pasja   do dźwięków, które poruszają, inspirują i łączą nas bez względu na to, skąd pochodzimy. <span style="color:#1C5D99">dropout</span> to nie     tylko strona do streamingu muzyki; to przestrzeń, gdzie artyści i fani tworzą wspólnie nowy wymiar muzycznych doświadczeń.
-
-            <h3>Nasza misja jest prosta: </h3> Dostarczać niezapomniane wrażenia muzyczne, udostępniając szeroką gamę utworów od znanych wykonawców,    aż po perełki        niezależnej sceny. W dropout wierzymy, że każdy ma prawo do odkrywania, dzielenia się i czerpania radości z muzyki –  bez ograniczeń, bez    kompromisów.
-
-            <h3>Z nami</h3> Zanurzysz się w głębię gatunków i dźwięków, które definiują współczesną scenę muzyczną. Od hip-hopu, przez elektronikę,     indie, rock, jazz,       aż po klasykę – dropout jest domem dla wszystkiego, co rytmiczne, melodyjne, ekscytujące i nowatorskie.
-
-            <h3>Przygotuj się</h3> Na podróż przez nieskończony wszechświat muzyki, gdzie każdy klik przenosi Cię w inne miejsce, a każdy utwór to  nowa historia do      odkrycia. Czy jesteś gotowy, aby stać się częścią tej przygody? Zapnij pasy, włącz <span   style="color:#1C5D99">dropout</span> i daj się ponieść fali dźwięków, która nie zna granic.       Witaj w domu, miłośniku muzyki.     Zapraszamy do świata <span style="color:#1C5D99">dropout</span>, gdzie muzyka gra dla Ciebie.</p>
-            <article id="music_feed">
-                <h2>Odkryj nowości od artystów</h2>
-                <!--- -->
-            </article>
+            <?php
+                @session_start();
+                if(isset($_SESSION['login'])){
+                    echo '<h1>Witaj ' . user() . '!
+                    <p>Oto nowości przygotowane dla Ciebie.';
+                    $db = mysqli_connect('localhost','root','','dropout2.0');
+                    $query = "SELECT title, cover, created_by, filename FROM music";
+                    $result = mysqli_query($db, $query);
+                    if (mysqli_num_rows($result) > 0) {
+                        $row = mysqli_fetch_assoc($result);
+                        echo '
+                        <article id="music_feed">
+                            <img src="./' . $row['cover'] . 'alt=cover>
+                            <h3>' . $row['title'] . '</h3>
+                            <h5>' . $row['created_by'] . '</h5>
+                            <audio controls>
+                                <source src="./'. $row['filename'] . '" type="audio/mp3">
+                            </audio>
+                        </article>';
+                    }
+                }else{
+                    echo'<h1>Witaj na <span style="color:#1C5D99">dropout</span></h1><p>Tutaj muzyka spotyka swoją przyszłość. W sercu naszej platformy leży pasja   do dźwięków, które poruszają, inspirują i łączą nas bez względu na to, skąd pochodzimy. <span style="color:#1C5D99">dropout</span> to nie     tylko strona do streamingu muzyki; to przestrzeń, gdzie artyści i fani tworzą wspólnie nowy wymiar muzycznych doświadczeń.
+                    <h3>Nasza misja jest prosta: </h3> Dostarczać niezapomniane wrażenia muzyczne, udostępniając szeroką gamę utworów od znanych wykonawców,    aż po perełki        niezależnej sceny. W dropout wierzymy, że każdy ma prawo do odkrywania, dzielenia się i czerpania radości z muzyki –  bez ograniczeń, bez    kompromisów.
+                    <h3>Z nami</h3> Zanurzysz się w głębię gatunków i dźwięków, które definiują współczesną scenę muzyczną. Od hip-hopu, przez elektronikę,     indie, rock, jazz,       aż po klasykę – <span style="color:#1C5D99">dropout</span> jest domem dla wszystkiego, co rytmiczne, melodyjne, ekscytujące i nowatorskie.
+                    <h3>Przygotuj się</h3> Na podróż przez nieskończony wszechświat muzyki, gdzie każdy klik przenosi Cię w inne miejsce, a każdy utwór to  nowa historia do      odkrycia. Czy jesteś gotowy, aby stać się częścią tej przygody? Zapnij pasy, włącz <span   style="color:#1C5D99">dropout</span> i daj się ponieść fali dźwięków, która nie zna granic.       Witaj w domu, miłośniku muzyki.     Zapraszamy do świata <span style="color:#1C5D99">dropout</span>, gdzie muzyka gra dla Ciebie.</p>
+                    <article id="music_feed">
+                        <h2>Odkryj nowości od artystów</h2>';
+                        $db = mysqli_connect('localhost','root','','dropout2.0');
+                        $query = "SELECT title, cover, created_by filename FROM music";
+                        $result = mysqli_query($db, $query);
+                        if (mysqli_num_rows($result) > 0) {
+                            $row = mysqli_fetch_assoc($result);
+                            echo '
+                            <article id="music_feed">
+                                <img src=' . $row['cover'] . 'alt=cover>
+                                <h3>' . $row['title'] . '</h3>
+                                <h5>' . $row['created_by'] . '</h3>
+                                <audio controls>
+                                    <source src='. $row['filename'] . ' type="audio/mpeg">
+                                </audio>
+                            </article>';
+                        }
+                    '</article>';
+                }
+            ?>    
         </article>
-        
     </main>
 </body>
 </html>
