@@ -67,7 +67,7 @@
                             <h3>' . $row['title'] . '</h3>
                             <h5>' . $row['created_by'] . '</h5>
                             <audio controls>
-                                <source src="./'. $row['filename'] . '" type="audio/mp3">
+                                <source src="' . $row['filename'] . '" type="audio/mp3">
                             </audio>
                         </article>';
                     }
@@ -87,9 +87,9 @@
                             <article id="music_feed">
                                 <img src=' . $row['cover'] . 'alt=cover>
                                 <h3>' . $row['title'] . '</h3>
-                                <h5>' . $row['created_by'] . '</h3>
+                                <h5>' . $row['created_by'] . '</h5>
                                 <audio controls>
-                                    <source src='. $row['filename'] . ' type="audio/mpeg">
+                                    <source src="' . $row['filename'] . '" type="audio/mp3">
                                 </audio>
                             </article>';
                         }
