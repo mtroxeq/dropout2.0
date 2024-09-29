@@ -60,17 +60,18 @@
                     $query = "SELECT title, cover, created_by, filename FROM music";
                     $result = mysqli_query($db, $query);
                     if (mysqli_num_rows($result) > 0) {
-                        $row = mysqli_fetch_assoc($result);
-                        echo '
-                        <article id="music_feed">
-                            <img src="./' . $row['cover'] . 'alt=cover>
-                            <h3>' . $row['title'] . '</h3>
-                            <h5>' . $row['created_by'] . '</h5>
-                            <audio controls>
-                                <source src="' . $row['filename'] . '" type="audio/mp3">
-                            </audio>
-                        </article>';
-                    }
+                        while ($row = mysqli_fetch_assoc($result)){
+                            echo '
+                            <article id="music_feed">
+                                <img src="./' . $row['cover'] . '" alt="cover">
+                                <h3>' . $row['title'] . '</h3>
+                                <h5>' . $row['created_by'] . '</h5>
+                                <audio controls>
+                                    <source src="./' . htmlspecialchars($row['filename']) . '" type="audio/mp3">
+                                    Twoja przeglądarka nie obsługuje elementu audio.
+                                </audio>
+                            </article>';
+                    }}
                 }else{
                     echo'<h1>Witaj na <span style="color:#1C5D99">dropout</span></h1><p>Tutaj muzyka spotyka swoją przyszłość. W sercu naszej platformy leży pasja   do dźwięków, które poruszają, inspirują i łączą nas bez względu na to, skąd pochodzimy. <span style="color:#1C5D99">dropout</span> to nie     tylko strona do streamingu muzyki; to przestrzeń, gdzie artyści i fani tworzą wspólnie nowy wymiar muzycznych doświadczeń.
                     <h3>Nasza misja jest prosta: </h3> Dostarczać niezapomniane wrażenia muzyczne, udostępniając szeroką gamę utworów od znanych wykonawców,    aż po perełki        niezależnej sceny. W dropout wierzymy, że każdy ma prawo do odkrywania, dzielenia się i czerpania radości z muzyki –  bez ograniczeń, bez    kompromisów.
@@ -79,20 +80,21 @@
                     <article id="music_feed">
                         <h2>Odkryj nowości od artystów</h2>';
                         $db = mysqli_connect('localhost','root','','dropout2.0');
-                        $query = "SELECT title, cover, created_by filename FROM music";
+                        $query = "SELECT title, cover, created_by, filename FROM music";
                         $result = mysqli_query($db, $query);
                         if (mysqli_num_rows($result) > 0) {
-                            $row = mysqli_fetch_assoc($result);
-                            echo '
-                            <article id="music_feed">
-                                <img src=' . $row['cover'] . 'alt=cover>
-                                <h3>' . $row['title'] . '</h3>
-                                <h5>' . $row['created_by'] . '</h5>
-                                <audio controls>
-                                    <source src="' . $row['filename'] . '" type="audio/mp3">
-                                </audio>
-                            </article>';
-                        }
+                            while ($row = mysqli_fetch_assoc($result)){
+                                echo '
+                                <article id="music_feed">
+                                    <img src="./' . $row['cover'] . '" alt="cover">
+                                    <h3>' . $row['title'] . '</h3>
+                                    <h5>' . $row['created_by'] . '</h5>
+                                    <audio controls>
+                                        <source src="./' . htmlspecialchars($row['filename']) . '" type="audio/mp3">
+                                        Twoja przeglądarka nie obsługuje elementu audio.
+                                    </audio>
+                                </article>';
+                        }}
                     '</article>';
                 }
             ?>    
